@@ -164,6 +164,19 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Enable autoread and set up checking triggers
+vim.o.autoread = true
+-- Trigger autoread when switching buffers, gaining focus, or on a timer
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
+  command = "if mode() != 'c' | checktime | endif",
+})
+
+-- vim.api.nvim_create_autocmd({ 'FocusGained' }, {
+--   callback = function()
+--     if package.loaded['neo-tree'] then require('neo-tree.sources.manager').refresh 'filesystem' end
+--   end,
+-- })
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -212,11 +225,25 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Some of my own
+vim.keymap.set('n', '<M-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
+-- Probably won't add the below
+-- bind-key -r f run-shell "tmux neww tms"
+-- bind-key -r h run-shell "tms $HOME/go/src/github.com/4mochila/mochila-api"
+-- bind-key -r j run-shell "tms $HOME/go/src/github.com/4mochila/mochila-inf"
+-- bind-key -r t run-shell "tms $HOME/dev/prayer-wall/prayer-wall"
+-- bind-key -r r run-shell "tms $HOME/dev/prayer-wall/prayer-wall-rules"
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+vim.keymap.set('n', '<leader>yp', function()
+  vim.fn.setreg('+', vim.fn.expand '%:.')
+  print('Yanked: ' .. vim.fn.expand '%:.')
+end, { desc = 'Copy relative path of current file' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -409,6 +436,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<leader>so', builtin.lsp_document_symbols, { desc = '[S]earch D[o]cument symbols' })
       vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
