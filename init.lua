@@ -415,9 +415,15 @@ require('lazy').setup({
       require('telescope').setup {
         defaults = {
           vimgrep_arguments = {
-            'rg', '--color=never', '--no-heading', '--with-filename',
-            '--line-number', '--column', '--smart-case',
-            '--glob', '!node_modules',
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+            '--glob',
+            '!node_modules',
           },
         },
         pickers = {
@@ -936,7 +942,25 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'go', 'javascript', 'typescript', 'tsx', 'json', 'css' }
+      local parsers = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'go',
+        'javascript',
+        'typescript',
+        'tsx',
+        'json',
+        'css',
+      }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
@@ -960,6 +984,9 @@ require('lazy').setup({
         end,
       })
     end,
+  },
+  {
+    'delphinus/vim-firestore',
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
