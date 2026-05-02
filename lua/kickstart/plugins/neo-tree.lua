@@ -22,7 +22,24 @@ return {
       filtered_items = {
         visible = true,
         hide_dotfiles = false,
+        never_show = { 'node_modules' },
       },
+      find_args = function(cmd, _, _, args)
+        if cmd == 'fd' or cmd == 'fdfind' then
+          table.insert(args, '--exclude')
+          table.insert(args, 'node_modules')
+        elseif cmd == 'find' then
+          for i = #args, 1, -1 do
+            if args[i] == '-print' then
+              table.insert(args, i, '*/node_modules/*')
+              table.insert(args, i, '-path')
+              table.insert(args, i, '-not')
+              break
+            end
+          end
+        end
+        return args
+      end,
       window = {
         mappings = {
           ['\\'] = 'close_window',
