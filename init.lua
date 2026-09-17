@@ -442,11 +442,16 @@ require('lazy').setup({
             '--smart-case',
             '--glob',
             '!node_modules',
+            '--hidden',
+            '--glob',
+            '!node_modules',
+            '--glob',
+            '!.git',
           },
         },
         pickers = {
           find_files = {
-            find_command = { 'rg', '--files', '--glob', '!node_modules' },
+            find_command = { 'rg', '--files', '--glob', '!node_modules', '--hidden', '--glob', '!.git' },
           },
         },
         extensions = {
