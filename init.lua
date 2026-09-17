@@ -171,6 +171,24 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHo
   command = "if mode() != 'c' | checktime | endif",
 })
 
+vim.api.nvim_create_autocmd('FocusLost', {
+  desc = 'Autosave on focus loss',
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if
+        vim.api.nvim_buf_is_loaded(buf)
+        and vim.bo[buf].buftype == ''
+        and vim.bo[buf].modifiable
+        and vim.bo[buf].modified
+        and not vim.bo[buf].readonly
+        and vim.api.nvim_buf_get_name(buf) ~= ''
+      then
+        vim.api.nvim_buf_call(buf, function() vim.cmd 'silent! update' end)
+      end
+    end
+  end,
+})
+
 -- vim.api.nvim_create_autocmd({ 'FocusGained' }, {
 --   callback = function()
 --     if package.loaded['neo-tree'] then require('neo-tree.sources.manager').refresh 'filesystem' end
